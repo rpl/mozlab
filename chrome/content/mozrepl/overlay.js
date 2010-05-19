@@ -35,13 +35,24 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-
 window.addEventListener(
-    'load', function(event) { mozrepl.initOverlay(); }, false);
+    'load', function(event) { openMozREPLInstall(); }, false);
 
-var mozrepl = {};
+function openMozREPLInstall() {
+  var extmgr = Cc["@mozilla.org/extensions/manager;1"].getService(Ci.nsIExtensionManager);
+  var pref = Cc['@mozilla.org/preferences-service;1']
+    .getService(Ci.nsIPrefService)
+    .getBranch('extensions.mozlab.');
+  
+  if(extmgr.getItemForID("mozrepl@hyperstruct.net") && pref.getBoolPref("firstrun")) {
+    // AUTO-UNINSTALL MOZLAB: extmgr.uninstallItem("mozlab@hyperstruct.net");
+    handle = window.open("chrome://mozlab/content/mozrepl/mozrepl-installed.xul", "mozrepl_install", "chrome=yes,modal=yes");
+    handle.focus();
+    pref.setBoolPref("firstrun", false);
+  }
+  else if (pref.getBoolPref("firstrun")) {
+    handle = window.open("chrome://mozlab/content/mozrepl/mozrepl-install.xul", "mozrepl_install", "chrome=yes,modal=yes");
+    handle.focus();
+  }
+}
 
-Components
-.classes['@mozilla.org/moz/jssubscript-loader;1']
-.getService(Components.interfaces.mozIJSSubScriptLoader)
-    .loadSubScript('chrome://mozlab/content/mozrepl/overlay_impl.js', mozrepl);
