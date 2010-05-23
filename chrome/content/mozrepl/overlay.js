@@ -70,6 +70,7 @@ window.addEventListener(
         }
       }
 
+      var handle = null;
   
       if(extmgr.getItemForID("mozrepl@hyperstruct.net") && pref.getBoolPref("firstrun")) {
         // AUTO-UNINSTALL MOZLAB: extmgr.uninstallItem("mozlab@hyperstruct.net");
